@@ -7,6 +7,18 @@ pipeline {
                 echo 'Build the code by Maven...!'
                 echo 'mvn clean package'     
             }
+            post {
+                success {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Build Successful',
+                    body: 'The build executed successfully...!'
+                }
+                failure {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Build failed',
+                    body: 'The build execution was failed...!'
+                }
+            }
         }
         
         stage('Unit Test and Integration Test') {
@@ -17,17 +29,17 @@ pipeline {
                 echo 'Execute the Integration Test...!'
                 echo 'Intergration test using Robot Framework'       
             }
-        }
-        post {
-            success {
-                mail to: 'ajayofficial1998@gmail.com',
-                subject: 'Unit Test and Integration Test are Successful',
-                body: 'The Testing executed successfully...!'
-            }
-            failure {
-                mail to: 'ajayofficial1998@gmail.com',
-                subject: 'Tests failed',
-                body: 'The test execution was failed...!'
+            post {
+                success {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Unit Test and Integration Test are Successful',
+                    body: 'The Testing executed successfully...!'
+                }
+                failure {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Tests failed',
+                    body: 'The test execution was failed...!'
+                }
             }
         }
         
@@ -43,17 +55,17 @@ pipeline {
                 echo 'Perform Security Scan...!'  
                 echo 'Security Scanning using SonarQube'
             }
-        }
-        post {
-            success {
-                mail to: 'ajayofficial1998@gmail.com',
-                subject: 'Security scan was Successful',
-                body: 'The security scan executed successfully...!'
-            }
-            failure {
-                mail to: 'ajayofficial1998@gmail.com',
-                subject: 'Security scan failed',
-                body: 'The Security scan execution was failed...!'
+            post {
+                success {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Security scan was Successful',
+                    body: 'The security scan executed successfully...!'
+                }
+                failure {
+                    mail to: 'ajayofficial1998@gmail.com',
+                    subject: 'Security scan failed',
+                    body: 'The Security scan execution was failed...!'
+                }
             }
         }
         
