@@ -18,6 +18,7 @@ pipeline {
                 echo 'Intergration test using Robot Framework'       
             }
         }
+
         
         stage('Code Analysis') {
             steps {
@@ -31,13 +32,14 @@ pipeline {
                 echo 'Perform Security Scan...!'  
                 echo 'Security Scanning using SonarQube'
             }
-        }
-         post {
-             success {
-                mail to:'ajayofficial1998@gmail.com',
-                subject: 'Security Scan Successful',
-                body: 'Security Scan run successfully...!',
-                attachLog: true
+            post {
+                success {
+                    emailext to: 'ajayofficial1998@gmail.com',
+                             subject: 'Security Scan Successful',
+                             body: 'Security Scan run successfully...!',
+                             attachLog: true
+                }
+            }
         }
         
         stage('Deploy to Staging') {
@@ -63,16 +65,16 @@ pipeline {
     }
     
     post {
-             success {
-                mail to:'ajayofficial1998@gmail.com',
-                subject: 'Pipeline Successful',
-                body: 'The pipeline executed successfully...!',
-                attachLog: true
+        success {
+            emailext to: 'ajayofficial1998@gmail.com',
+                     subject: 'Pipeline Successful',
+                     body: 'The pipeline executed successfully...!',
+                     attachLog: true
         }
-             failure {
-                mail to:'ajayofficial1998@gmail.com',
-                subject: 'Pipeline failed',
-                body: 'The pipeline execution was failed...!'
+        failure {
+            emailext to: 'ajayofficial1998@gmail.com',
+                     subject: 'Pipeline failed',
+                     body: 'The pipeline execution was failed...!'
         }
     }
 }
