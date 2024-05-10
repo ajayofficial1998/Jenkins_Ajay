@@ -32,6 +32,13 @@ pipeline {
                 echo 'Security Scanning using SonarQube'
             }
         }
+         post {
+             success {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Security Scan Successful',
+                body: 'Security Scan run successfully...!',
+                attachLog: true
+        }
         
         stage('Deploy to Staging') {
             steps {
@@ -59,7 +66,8 @@ pipeline {
              success {
                 mail to:'ajayofficial1998@gmail.com',
                 subject: 'Pipeline Successful',
-                body: 'The pipeline executed successfully...!'
+                body: 'The pipeline executed successfully...!',
+                attachLog: true
         }
              failure {
                 mail to:'ajayofficial1998@gmail.com',
