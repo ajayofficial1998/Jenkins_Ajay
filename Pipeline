@@ -64,13 +64,81 @@ pipeline {
         }
     }
     
+   pipeline {
+    agent any
+    
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Build the code by Maven...!'
+                echo 'mvn clean package'     
+            }
+        }
+        
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Execute the Unit Test...!'
+                echo 'Unit test using Cucumber'
+
+                echo 'Execute the Integration Test...!'
+                echo 'Intergration test using Robot Framework'       
+            }
+        }
+        
+        stage('Code Analysis') {
+            steps {
+                echo 'Integrate SonarQube Analysis...!'
+                echo 'Analyzing the code using SonarQube'
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                echo 'Perform Security Scan...!'  
+                echo 'Security Scanning using SonarQube'
+            }
+            post {
+                 success {
+                    echo 'Email Notification'
+                    emailext subject:'Security Scan Successful',
+                    body: 'The Security scan was executed successfully...!',
+                    to: 'ajayofficial1998@gmail.com',
+                    attachLog: true //Attach build log
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploy to the staging using AWS EC2 instance...!' 
+                echo 'Deploying it to the staging server'
+            }
+        }
+        
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Run the Integration Test on Staging server...!'
+                echo 'Staging of integration test using Postman'
+            }
+        }
+        
+        stage('Deploy to Production') {
+            steps {
+                echo 'Application deployment to the Production environment...!'
+                echo 'Application Deployment using AWS EC2 instance'
+            }
+        }
+    }
+    
     post {
         success {
             echo 'Email Notification'
-            emailext subject:'Pipeline Successful',
-            body: 'The pipeline executed successfully...!',
-            to: 'ajayofficial1998@gmail.com',
-            attachLog: true
+            emailext subject: 'Pipeline Successful',
+                      body: 'The pipeline executed successfully...!',
+                      to: 'ajayofficial1998@gmail.com',
+                      attachLog: true // Attach build log
         }
+
     }
+}
 }
