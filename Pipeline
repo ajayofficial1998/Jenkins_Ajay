@@ -31,14 +31,15 @@ pipeline {
                 echo 'Perform Security Scan...!'  
                 echo 'Security Scanning using SonarQube'
             }
-        }
-        post {
-             success {
-                echo 'Email Notification'
-                emailext subject:'Security Successful',
-                body: 'The Security scan was executed successfully...!',
-                to: 'ajayofficial1998@gmail.com',
-                attachLog: true
+            post {
+                 success {
+                    echo 'Email Notification'
+                    emailext subject:'Security Successful',
+                    body: 'The Security scan was executed successfully...!',
+                    to: 'ajayofficial1998@gmail.com',
+                    attachLog: true
+                }
+            }
         }
         
         stage('Deploy to Staging') {
@@ -64,13 +65,12 @@ pipeline {
     }
     
     post {
-             success {
-                echo 'Email Notification'
-                emailext subject:'Pipeline Successful',
-                body: 'The pipeline executed successfully...!',
-                to: 'ajayofficial1998@gmail.com',
-                attachLog: true
+        success {
+            echo 'Email Notification'
+            emailext subject:'Pipeline Successful',
+            body: 'The pipeline executed successfully...!',
+            to: 'ajayofficial1998@gmail.com',
+            attachLog: true
         }
     }
-}
 }
