@@ -9,7 +9,7 @@ pipeline {
             }
         }
         
-        stage('Unit and Integration Tests') {
+        stage('Unit Test and Integration Test') {
             steps {
                 echo 'Execute the Unit Test...!'
                 echo 'Unit test using Cucumber'
@@ -18,6 +18,18 @@ pipeline {
                 echo 'Intergration test using Robot Framework'       
             }
         }
+         post {
+             success {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Unit Test and Integration Test are Successful',
+                body: 'The Testing executed successfully...!',
+        }
+             failure {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Tests failed',
+                body: 'The test execution was failed...!'
+        }
+    }
         
         stage('Code Analysis') {
             steps {
@@ -31,16 +43,19 @@ pipeline {
                 echo 'Perform Security Scan...!'  
                 echo 'Security Scanning using SonarQube'
             }
-            post {
-                success {
-                    echo 'Email Notification'
-                    emailext subject: 'Security Scan Successful',
-                              body: 'The Security scan was executed successfully...!',
-                              to: 'ajayofficial1998@gmail.com',
-                              attachLog: true // Attach build log
-                }
-            }
         }
+         post {
+             success {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Security scan was Successful',
+                body: 'The security scan executed successfully...!',
+        }
+             failure {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Security scan failed',
+                body: 'The Security scan execution was failed...!'
+        }
+    }
         
         stage('Deploy to Staging') {
             steps {
@@ -65,13 +80,15 @@ pipeline {
     }
     
     post {
-        success {
-            echo 'Email Notification'
-            emailext subject: 'Pipeline Successful',
-                      body: 'The pipeline executed successfully...!',
-                      to: 'ajayofficial1998@gmail.com',
-                      attachLog: true // Attach build log
+             success {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Pipeline Successful',
+                body: 'The pipeline executed successfully...!',
         }
-
+             failure {
+                mail to:'ajayofficial1998@gmail.com',
+                subject: 'Pipeline failed',
+                body: 'The pipeline execution was failed...!'
+        }
     }
 }
