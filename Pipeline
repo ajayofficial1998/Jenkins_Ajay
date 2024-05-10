@@ -18,18 +18,18 @@ pipeline {
                 echo 'Intergration test using Robot Framework'       
             }
         }
-         post {
-             success {
-                mail to:'ajayofficial1998@gmail.com',
+        post {
+            success {
+                mail to: 'ajayofficial1998@gmail.com',
                 subject: 'Unit Test and Integration Test are Successful',
-                body: 'The Testing executed successfully...!',
-        }
-             failure {
-                mail to:'ajayofficial1998@gmail.com',
+                body: 'The Testing executed successfully...!'
+            }
+            failure {
+                mail to: 'ajayofficial1998@gmail.com',
                 subject: 'Tests failed',
                 body: 'The test execution was failed...!'
+            }
         }
-    }
         
         stage('Code Analysis') {
             steps {
@@ -44,18 +44,18 @@ pipeline {
                 echo 'Security Scanning using SonarQube'
             }
         }
-         post {
-             success {
-                mail to:'ajayofficial1998@gmail.com',
+        post {
+            success {
+                mail to: 'ajayofficial1998@gmail.com',
                 subject: 'Security scan was Successful',
-                body: 'The security scan executed successfully...!',
-        }
-             failure {
-                mail to:'ajayofficial1998@gmail.com',
+                body: 'The security scan executed successfully...!'
+            }
+            failure {
+                mail to: 'ajayofficial1998@gmail.com',
                 subject: 'Security scan failed',
                 body: 'The Security scan execution was failed...!'
+            }
         }
-    }
         
         stage('Deploy to Staging') {
             steps {
@@ -80,15 +80,15 @@ pipeline {
     }
     
     post {
-             success {
-                mail to:'ajayofficial1998@gmail.com',
-                subject: 'Pipeline Successful',
-                body: 'The pipeline executed successfully...!',
+        success {
+            mail to: 'ajayofficial1998@gmail.com',
+            subject: 'Pipeline Successful',
+            body: 'The pipeline executed successfully...!'
         }
-             failure {
-                mail to:'ajayofficial1998@gmail.com',
-                subject: 'Pipeline failed',
-                body: 'The pipeline execution was failed...!'
+        failure {
+            mail to: 'ajayofficial1998@gmail.com',
+            subject: 'Pipeline failed',
+            body: 'The pipeline execution was failed...!'
         }
     }
 }
