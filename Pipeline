@@ -62,20 +62,22 @@ pipeline {
         }
     }
     
-    post {
+    post 
+    {
         success 
         {
-        mail to:"ajayofficial1998@gmail.com",
-        emailext attachLog: true,
-        subject: "Pipeline was a Success",  
-        body: "Pipeline execution successfull."
+        {
+        emailext subject: 'Pipeline Successful',
+        body: 'The pipeline executed successfully...!',
+        to: 'ajayofficial1998@gmail.com',
+        attachLog: true
         }
         failure 
         {
-        mail to:"ajayofficial1998@gmail.com",
-        emailext attachLog: true,
-        subject: "Pipeline was a failure",  
-        body: "Pipeline execution failed."
+        emailext subject: 'Pipeline failed',
+        body: 'The pipeline execution was failed...!',
+        to: 'ajayofficial1998@gmail.com',
+        attachLog: true
         }
     }
 }
