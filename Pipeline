@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    triggers {
+        githubPush()
+        }
     
     stages {
         stage('Build') {
@@ -93,7 +97,7 @@ pipeline {
     
     post {
         success {
-            emailext attachmentsPattern: 'Pipeline Successful',
+            emailext subject: 'Pipeline Successful',
                     body: 'The pipeline executed successfully...!',
                     to: 'ajayofficial1998@gmail.com',
                     attachLog: true
