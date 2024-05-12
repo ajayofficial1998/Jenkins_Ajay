@@ -92,8 +92,8 @@ pipeline {
     }
     
     post {
-        always {
-            emailext subject: 'Pipeline Successful',
+        success {
+            emailext attachmentsPattern: 'Pipeline Successful',
                     body: 'The pipeline executed successfully...!',
                     to: 'ajayofficial1998@gmail.com',
                     attachLog: true
