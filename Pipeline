@@ -96,11 +96,10 @@ pipeline {
     }
     
     post {
-        success {
-            emailext subject: 'Pipeline Successful',
-                    body: 'The pipeline executed successfully...!',
-                    to: 'ajayofficial1998@gmail.com',
-                    attachmentsPattern: '**/build.log'
+        always {
+            mail to: 'ajayofficial1998@gmail.com',
+            subject: 'Pipeline Succeeded',
+            body: 'The pipeline execution was success and build log attached...!'
         }
         failure {
             mail to: 'ajayofficial1998@gmail.com',
