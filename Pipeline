@@ -100,7 +100,7 @@ pipeline {
             emailext subject: 'Pipeline Successful',
                     body: 'The pipeline executed successfully...!',
                     to: 'ajayofficial1998@gmail.com',
-                    attachLog: true
+                    attachmentsPattern: '**/build.log'
         }
         failure {
             mail to: 'ajayofficial1998@gmail.com',
