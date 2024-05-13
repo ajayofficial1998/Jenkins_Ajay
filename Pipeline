@@ -21,81 +21,14 @@ pipeline {
             }
         }
         
-        stage('Unit Test and Integration Test') {
-            steps {
-                echo 'Execute the Unit Test...!'
-                echo 'Unit test using Cucumber'
-
-                echo 'Execute the Integration Test...!'
-                echo 'Intergration test using Robot Framework'       
-            }
-            post {
-                success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                    subject: 'Unit Test and Integration Test are Successful',
-                    body: 'The Testing executed successfully...!'
-                }
-                failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                    subject: 'Tests failed',
-                    body: 'The test execution was failed...!'
-                }
-            }
-        }
-        
-        stage('Code Analysis') {
-            steps {
-                echo 'Integrate SonarQube Analysis...!'
-                echo 'Analyzing the code using SonarQube'
-            }
-        }
-        
-        stage('Security Scan') {
-            steps {
-                echo 'Perform Security Scan...!'  
-                echo 'Security Scanning using SonarQube'
-            }
-            post {
-                success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                    subject: 'Security scan was Successful',
-                    body: 'The security scan executed successfully...!'
-                }
-                failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                    subject: 'Security scan failed',
-                    body: 'The Security scan execution was failed...!'
-                }
-            }
-        }
-        
-        stage('Deploy to Staging') {
-            steps {
-                echo 'Deploy to the staging using AWS EC2 instance...!' 
-                echo 'Deploying it to the staging server'
-            }
-        }
-        
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Run the Integration Test on Staging server...!'
-                echo 'Staging of integration test using Postman'
-            }
-        }
-        
-        stage('Deploy to Production') {
-            steps {
-                echo 'Application deployment to the Production environment...!'
-                echo 'Application Deployment using AWS EC2 instance'
-            }
-        }
+        // other stages...
     }
     
     post {
         always {
             mail to: 'ajayofficial1998@gmail.com',
             subject: 'Pipeline Succeeded',
-            body: 'The pipeline execution was success and build log attached...!'
+            body: 'The pipeline execution was success and build log attached...!',
             attachLog: true
         }
         failure {
