@@ -27,13 +27,11 @@ pipeline {
         
         stage('Unit Test and Integration Test') {
             steps {
-                echo 'Executing Unit Tests...'
-                // Replace with actual test commands
+                echo 'Execute the Unit Test...!'
                 echo 'Unit test using Cucumber'
 
-                echo 'Executing Integration Tests...'
-                // Replace with actual test commands
-                echo 'Integration test using Robot Framework'       
+                echo 'Execute the Integration Test...!'
+                echo 'Intergration test using Robot Framework'       
             }
             post {
                 success {
@@ -50,54 +48,50 @@ pipeline {
         }
         
         stage('Code Analysis') {
+            stage('Code Analysis') {
             steps {
-                echo 'Integrating SonarQube Analysis...'
-                // Replace with actual SonarQube commands
+                echo 'Integrate SonarQube Analysis...!'
                 echo 'Analyzing the code using SonarQube'
             }
         }
         
         stage('Security Scan') {
             steps {
-                echo 'Performing Security Scan...'
-                // Replace with actual security scan commands
-                echo 'Security scanning using SonarQube'
+                echo 'Perform Security Scan...!'  
+                echo 'Security Scanning using SonarQube'
             }
             post {
                 success {
                     mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Security Scan Successful',
-                         body: 'The security scan executed successfully...!'
+                    subject: 'Security scan was Successful',
+                    body: 'The security scan executed successfully...!'
                 }
                 failure {
                     mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Security Scan failed',
-                         body: 'The security scan execution failed...!'
+                    subject: 'Security scan failed',
+                    body: 'The Security scan execution was failed...!'
                 }
             }
         }
         
-        stage('Deploy to Staging') {
+         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying to the staging environment using AWS EC2 instance...'
-                // Replace with actual deployment commands
-                echo 'Deploying to the staging server'
+                echo 'Deploy to the staging using AWS EC2 instance...!' 
+                echo 'Deploying it to the staging server'
             }
         }
         
-        stage('Integration Tests on Staging') {
+stage('Integration Tests on Staging') {
             steps {
-                echo 'Running Integration Tests on Staging server...'
-                // Replace with actual test commands
-                echo 'Integration test using Postman'
+                echo 'Run the Integration Test on Staging server...!'
+                echo 'Staging of integration test using Postman'
             }
         }
         
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying application to the Production environment...'
-                // Replace with actual deployment commands
-                echo 'Deploying application using AWS EC2 instance'
+                echo 'Application deployment to the Production environment...!'
+                echo 'Application Deployment using AWS EC2 instance'
             }
         }
     }
