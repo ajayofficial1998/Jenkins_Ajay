@@ -96,16 +96,21 @@ pipeline {
         }
     }
 
-    post {
+   post {
         always {
-            echo 'Sending Email Notification'
             emailext(
-                to: "${DEFAULT_RECIPIENT}",
-                subject: "Pipeline Status: ${currentBuild.result}",
-                body: "The pipeline execution resulted in ${currentBuild.result}.",
-                attachLog: true,
+                to: 'ajayofficial1998@gmail.com',
+                subject: "Build Status: ${currentBuild.currentResult}",
+                body: """<p>Build Status: ${currentBuild.currentResult}</p>""",
                 mimeType: 'text/html',
-                replyTo: '$DEFAULT_RECIPIENT'
+                attachLog: true,
+                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+                replyTo: 'ajayofficial1998@gmail.com',
+                smtpHost: 'smtp.gmail.com',
+                smtpPort: '465',
+                useSsl: true,
+                useAuthentication: true,
+                credentialsId: 'gmail-credentials'
             )
         }
     }
