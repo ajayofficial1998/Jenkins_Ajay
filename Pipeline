@@ -1,11 +1,12 @@
 pipeline {
     agent any
 
-    environment {
-        DEFAULT_RECIPIENT = 'ajayofficial1998@gmail.com'
-    }
-
     stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/ajayofficial1998/Jenkins_Ajay.git'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Building the code...!'
@@ -20,24 +21,12 @@ pipeline {
                 echo 'Integration test using Robot Framework'
             }
             post {
-                success {
-                    emailext(
-                        to: "${DEFAULT_RECIPIENT}",
-                        subject: 'Unit Test and Integration Test Successful',
-                        body: 'The tests executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
-                        attachLog: true,
-                        mimeType: 'text/html',
-                        replyTo: "${DEFAULT_RECIPIENT}"
-                    )
-                }
-                failure {
-                    emailext(
-                        to: "${DEFAULT_RECIPIENT}",
-                        subject: 'Unit and Integration Tests Failed',
-                        body: 'Unit and Integration Tests have failed.',
-                        attachLog: true,
-                        mimeType: 'text/html',
-                        replyTo: "${DEFAULT_RECIPIENT}"
+                always {
+                    emailext (
+                        subject: "Unit and Integration Tests: Build ${currentBuild.fullDisplayName}",
+                        body: "Unit and Integration Tests completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
                     )
                 }
             }
@@ -47,6 +36,16 @@ pipeline {
                 echo 'Integrate SonarQube Analysis...!'
                 echo 'Analyzing the code using SonarQube'
             }
+            post {
+                always {
+                    emailext (
+                        subject: "Code Analysis: Build ${currentBuild.fullDisplayName}",
+                        body: "Code Analysis completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
         stage('Security Scan') {
             steps {
@@ -54,24 +53,12 @@ pipeline {
                 echo 'Security Scanning using SonarQube'
             }
             post {
-                success {
-                    emailext(
-                        to: "${DEFAULT_RECIPIENT}",
-                        subject: 'Security Scan Successful',
-                        body: 'The security scan executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
-                        attachLog: true,
-                        mimeType: 'text/html',
-                        replyTo: "${DEFAULT_RECIPIENT}"
-                    )
-                }
-                failure {
-                    emailext(
-                        to: "${DEFAULT_RECIPIENT}",
-                        subject: 'Security Scan Failed',
-                        body: 'The security scan execution failed...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
-                        attachLog: true,
-                        mimeType: 'text/html',
-                        replyTo: "${DEFAULT_RECIPIENT}"
+                always {
+                    emailext (
+                        subject: "Security Scan: Build ${currentBuild.fullDisplayName}",
+                        body: "Security Scan completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
                     )
                 }
             }
@@ -81,11 +68,31 @@ pipeline {
                 echo 'Deploy to the staging using AWS EC2 instance...!'
                 echo 'Deploying it to the staging server'
             }
+            post {
+                always {
+                    emailext (
+                        subject: "Deploy to Staging: Build ${currentBuild.fullDisplayName}",
+                        body: "Deploy to Staging completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Run the Integration Test on Staging server...!'
                 echo 'Staging of integration test using Postman'
+            }
+            post {
+                always {
+                    emailext (
+                        subject: "Integration Tests on Staging: Build ${currentBuild.fullDisplayName}",
+                        body: "Integration Tests on Staging completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
+                    )
+                }
             }
         }
         stage('Deploy to Production') {
@@ -93,19 +100,25 @@ pipeline {
                 echo 'Application deployment to the Production environment...!'
                 echo 'Application Deployment using AWS EC2 instance'
             }
+            post {
+                always {
+                    emailext (
+                        subject: "Deploy to Production: Build ${currentBuild.fullDisplayName}",
+                        body: "Deploy to Production completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                        to: 'ajayofficial1998@gmail.com',
+                        attachLog: true
+                    )
+                }
+            }
         }
     }
-
     post {
         always {
-            emailext(
-                to: "${DEFAULT_RECIPIENT}",
-                subject: "Build Status: ${currentBuild.currentResult}",
-                body: """<p>Build Status: ${currentBuild.currentResult}</p>""",
-                mimeType: 'text/html',
-                attachLog: true,
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                replyTo: "${DEFAULT_RECIPIENT}"
+            emailext (
+                subject: "Build ${currentBuild.fullDisplayName} Completed",
+                body: "Build completed. See the Jenkins build details at: ${env.BUILD_URL}",
+                to: 'ajayofficial1998@gmail.com',
+                attachLog: true
             )
         }
     }
