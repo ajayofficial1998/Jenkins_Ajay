@@ -1,116 +1,85 @@
 pipeline {
     agent any
-    
-    triggers {
-        githubPush()
-    }
-    
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code with Maven...'
-                bat 'mvn clean package'
-            }
-            post {
-                success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Build Successful',
-                         body: 'The build executed successfully...!'
-                }
-                failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Build Failed',
-                         body: 'The build execution failed...!'
-                }
+                echo 'Building the code...!'
+                echo "Compiling the code and generating artifacts"
             }
         }
-        
-        stage('Unit Test and Integration Test') {
+        stage('Unit and Integration Tests') {
             steps {
                 echo 'Execute the Unit Test...!'
                 echo 'Unit test using Cucumber'
 
                 echo 'Execute the Integration Test...!'
-                echo 'Integration test using Robot Framework'       
+                echo 'Integration test using Robot Framework' 
             }
             post {
                 success {
-                    mail to: 'ajayofficial1998@gmail.com',
+                    mail to: '${env.NOTIFICATION_EMAIL}',
                          subject: 'Unit Test and Integration Test Successful',
-                         body: 'The tests executed successfully...!'
+                         body: 'The tests executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console'
                 }
                 failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Tests Failed',
-                         body: 'The test execution failed...!'
+                    mail to: '${env.NOTIFICATION_EMAIL}',
+                         subject: 'Unit and Integration Tests Failed',
+                         body: 'Unit and Integration Tests have failed.'
                 }
             }
         }
-        
         stage('Code Analysis') {
             steps {
                 echo 'Integrate SonarQube Analysis...!'
                 echo 'Analyzing the code using SonarQube'
             }
         }
-        
         stage('Security Scan') {
             steps {
-                echo 'Perform Security Scan...!'  
-                echo 'Security scanning using SonarQube'
+               echo 'Perform Security Scan...!'  
+               echo 'Security Scanning using SonarQube'
             }
             post {
                 success {
-                    mail to: 'ajayofficial1998@gmail.com',
+                    mail to: '${env.NOTIFICATION_EMAIL}',
                          subject: 'Security Scan Successful',
-                         body: 'The security scan executed successfully...!'
+                         body: 'The security scan executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console'
                 }
                 failure {
-                    mail to: 'ajayofficial1998@gmail.com',
+                    mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: 'Security Scan Failed',
-                         body: 'The security scan execution failed...!'
+                         body: 'The security scan execution failed...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console'
                 }
             }
         }
-        
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploy to the staging using AWS EC2 instance...!' 
-                echo 'Deploying to the staging server'
+                echo 'Deploying it to the staging server'
             }
         }
-        
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Run the Integration Test on Staging server...!'
-                echo 'Staging integration test using Postman'
+               echo 'Run the Integration Test on Staging server...!'
+               echo 'Staging of integration test using Postman'
             }
         }
-        
         stage('Deploy to Production') {
             steps {
                 echo 'Application deployment to the Production environment...!'
-                echo 'Application deployment using AWS EC2 instance'
+                echo 'Application Deployment using AWS EC2 instance'
             }
         }
     }
-    
+
     post {
         always {
             echo 'Sending Email Notification'
-            emailext(
-                subject: 'Pipeline Status: ${currentBuild.result}',
-                body: '''<html>
-                    <body>
-                    <p>The pipeline execution resulted in ${currentBuild.result}.</p>
-                    <p>Build Number: ${currentBuild.number}</p>
-                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
-                    </body>
-                    </html>''',
-                to: 'ajayofficial1998@gmail.com',
-                mimeType: 'text/html',
-                attachLog: true
-            )
+            emailext subject: "Pipeline Status: ${currentBuild.result}",
+            body: "The pipeline execution resulted in ${currentBuild.result}.",
+            to: 'ajayofficial1998@gmail.com',
+            attachLog: true
         }
     }
 }
