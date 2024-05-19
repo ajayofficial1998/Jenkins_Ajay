@@ -105,11 +105,7 @@ pipeline {
                 mimeType: 'text/html',
                 attachLog: true,
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                replyTo: "${DEFAULT_RECIPIENT}",
-                smtpHost: 'smtp.gmail.com',
-                smtpPort: '465',
-                useSsl: true,
-                credentialsId: 'gmail-credentials'
+                replyTo: "${DEFAULT_RECIPIENT}"
             )
         }
     }
