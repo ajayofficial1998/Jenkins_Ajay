@@ -1,108 +1,103 @@
 pipeline {
     agent any
-    
-    triggers {
-        githubPush()
+
+    environment {
+        CODE_DIRECTORY = "/path/to/code"
+        TEST_ENV = "testing"
+        PROD_ENV = "yourname_production"
+        NOTIFICATION_EMAIL = "ajayofficial1998@gmail.com"
     }
-    
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code with Maven...'
-                bat 'mvn clean package'
-            }
-            post {
-                success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Build Successful',
-                         body: 'The build executed successfully...!'
-                }
-                failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Build failed',
-                         body: 'The build execution failed...!'
-                }
+                echo "Fetching the source code from: $CODE_DIRECTORY"
+                echo "Compiling the code and generating artifacts"
+                // Add actual build steps here
             }
         }
-        
-        stage('Unit Test and Integration Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                echo 'Execute the Unit Test...!'
-                echo 'Unit test using Cucumber'
-
-                echo 'Execute the Integration Test...!'
-                echo 'Integration test using Robot Framework'       
+                echo "Running unit tests"
+                echo "Running integration tests"
+                // Add actual test steps here
             }
             post {
                 success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Unit Test and Integration Test Successful',
-                         body: 'The tests executed successfully...!'
+                    mail to: "${env.NOTIFICATION_EMAIL}",
+                         subject: "Unit and Integration Tests Passed",
+                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         mimeType: 'text/html'
                 }
                 failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Tests failed',
-                         body: 'The test execution failed...!'
+                    mail to: "${env.NOTIFICATION_EMAIL}",
+                         subject: "Unit and Integration Tests Failed",
+                         body: "Unit and Integration Tests have failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         mimeType: 'text/html'
                 }
             }
         }
-        
         stage('Code Analysis') {
             steps {
-                echo 'Integrate SonarQube Analysis...!'
-                echo 'Analyzing the code using SonarQube'
+                echo 'Checking the quality of the code'
+                // Add actual code quality check steps here
             }
         }
-        
         stage('Security Scan') {
             steps {
-                echo 'Perform Security Scan...!'  
-                echo 'Security Scanning using SonarQube'
+                echo 'Performing security scan'
+                // Add actual security scan steps here
             }
             post {
                 success {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Security Scan Successful',
-                         body: 'The security scan executed successfully...!'
+                    mail to: "${env.NOTIFICATION_EMAIL}",
+                         subject: "Security Scan Passed",
+                         body: "Security scan completed without any issues. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         mimeType: 'text/html'
                 }
                 failure {
-                    mail to: 'ajayofficial1998@gmail.com',
-                         subject: 'Security Scan failed',
-                         body: 'The security scan execution failed...!'
+                    mail to: "${env.NOTIFICATION_EMAIL}",
+                         subject: "Security Scan Failed",
+                         body: "Security scan has some issues. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         mimeType: 'text/html'
                 }
             }
         }
-        
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploy to the staging using AWS EC2 instance...!' 
-                echo 'Deploying it to the staging server'
+                echo "Deploying the application to the $TEST_ENV environment"
+                // Add actual staging deployment steps here
             }
         }
-        
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Run the Integration Test on Staging server...!'
-                echo 'Staging of integration test using Postman'
+                echo "Running integration tests on staging environment"
+                // Add actual integration tests on staging steps here
             }
         }
-        
         stage('Deploy to Production') {
             steps {
-                echo 'Application deployment to the Production environment...!'
-                echo 'Application Deployment using AWS EC2 instance'
+                echo "Deploying the code to the $PROD_ENV environment"
+                // Add actual production deployment steps here
             }
         }
     }
-    
+
     post {
         always {
-            echo 'Sending Email Notification'
-            emailext(
-                subject: 'Pipeline Status: ${currentBuild.result}',
-                body: 'The pipeline execution resulted in ${currentBuild.result}.',
+            emailext (
+                subject: "Pipeline Status: ${currentBuild.result}",
+                body: '''<html>
+                    <body>
+                    <p>Build Status: ${currentBuild.result}</p>
+                    <p>Build Number: ${currentBuild.number}</p>
+                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
+                    </body>
+                    </html>''',
                 to: 'ajayofficial1998@gmail.com',
-                attachLog: true
+                from: 'jenkins@example.com',
+                replyTo: 'jenkins@example.com',
+                mimeType: 'text/html'
             )
         }
     }
