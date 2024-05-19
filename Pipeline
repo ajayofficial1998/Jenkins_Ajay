@@ -27,7 +27,7 @@ pipeline {
                         body: 'The tests executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                         attachLog: true,
                         mimeType: 'text/html',
-                        replyTo: '$DEFAULT_RECIPIENT'
+                        replyTo: "${DEFAULT_RECIPIENT}"
                     )
                 }
                 failure {
@@ -37,7 +37,7 @@ pipeline {
                         body: 'Unit and Integration Tests have failed.',
                         attachLog: true,
                         mimeType: 'text/html',
-                        replyTo: '$DEFAULT_RECIPIENT'
+                        replyTo: "${DEFAULT_RECIPIENT}"
                     )
                 }
             }
@@ -61,7 +61,7 @@ pipeline {
                         body: 'The security scan executed successfully...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                         attachLog: true,
                         mimeType: 'text/html',
-                        replyTo: '$DEFAULT_RECIPIENT'
+                        replyTo: "${DEFAULT_RECIPIENT}"
                     )
                 }
                 failure {
@@ -71,7 +71,7 @@ pipeline {
                         body: 'The security scan execution failed...! See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                         attachLog: true,
                         mimeType: 'text/html',
-                        replyTo: '$DEFAULT_RECIPIENT'
+                        replyTo: "${DEFAULT_RECIPIENT}"
                     )
                 }
             }
@@ -96,21 +96,16 @@ pipeline {
         }
     }
 
-   post {
+    post {
         always {
             emailext(
-                to: 'ajayofficial1998@gmail.com',
+                to: "${DEFAULT_RECIPIENT}",
                 subject: "Build Status: ${currentBuild.currentResult}",
                 body: """<p>Build Status: ${currentBuild.currentResult}</p>""",
                 mimeType: 'text/html',
                 attachLog: true,
                 recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-                replyTo: 'ajayofficial1998@gmail.com',
-                smtpHost: 'smtp.gmail.com',
-                smtpPort: '465',
-                useSsl: true,
-                useAuthentication: true,
-                credentialsId: 'gmail-credentials'
+                replyTo: "${DEFAULT_RECIPIENT}"
             )
         }
     }
