@@ -17,7 +17,6 @@ pipeline {
             steps {
                 echo 'Execute the Unit Test...!'
                 echo 'Unit test using Cucumber'
-
                 echo 'Execute the Integration Test...!'
                 echo 'Integration test using Robot Framework' 
             }
@@ -84,7 +83,8 @@ pipeline {
             emailext subject: "Pipeline Status: ${currentBuild.result}",
             body: "The pipeline execution resulted in ${currentBuild.result}.",
             to: "${env.NOTIFICATION_EMAIL ?: env.DEFAULT_RECIPIENT}",
-            attachLog: true
+            attachLog: true,
+            mimeType: 'text/html'
         }
     }
 }
