@@ -9,7 +9,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo "Checkout the code from the GitHub repository"
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/veena223070113/Jenkins_6.2C.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/ajayofficial1998/Jenkins_Ajay.git']]])
             }
         }
 
@@ -70,7 +70,7 @@ pipeline {
             echo "Sending a notification email"
             emailext subject: "Pipeline ${currentBuild.result}",
                     body: "The pipeline has completed with status: ${currentBuild.result}.",
-                    to: "specified-email@example.com",
+                    to: "ajayofficial1998@example.com",
                     attachLog: true
         }
     }
