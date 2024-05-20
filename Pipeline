@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo "Execute the unit tests..!"
+                echo "Execute the unit tests....!"
                 echo "Unit test using Cucumber"
                 echo "Execute the integration tests"
                 echo "Integration test using Robot Framework"
