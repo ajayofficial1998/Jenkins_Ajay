@@ -98,8 +98,8 @@ pipeline {
                 to: 'ajayofficial1998@gmail.com',
                 from: 'jenkinsgithub@example.com',
                 replyTo: 'jenkinsgithub@example.com',
-                mimeType: 'text/html'
-                attachLog: true
+                mimeType: 'text/html',
+                attachLog: true // Attach console log
             )
         }
     }
