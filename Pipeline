@@ -1,10 +1,10 @@
 pipeline {
     agent any
 
-    environment {
+    domain {
         CODE_PATH = "/path/to/code"
-        TESTING_ENVIRONMENT = "testing"
-        PROD_ENVIRONMENT = "your_name"
+        TESTING_DOMAIN = "testing"
+        PRODUCTION_DOMAIN = "your_name"
         EMAIL_NOTIFICATION = "ajayofficial1998@gmail.com"
     }
 
@@ -64,7 +64,7 @@ pipeline {
         }
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying the application to the server $TEST_ENV environment"
+                echo "Deploying the application to the server $TESTING_DOMAIN environment"
                 
             }
         }
@@ -76,7 +76,7 @@ pipeline {
         }
         stage('Deploy to Production') {
             steps {
-                echo "Application deployment to the $PROD_ENVIRONMENT environment"
+                echo "Application deployment to the $PRODUCTION_DOMAIN environment"
                
             }
         }
