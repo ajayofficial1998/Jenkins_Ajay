@@ -70,7 +70,7 @@ pipeline {
             echo "Sending a notification email"
             emailext subject: "Pipeline ${currentBuild.result}",
                     body: "The pipeline has completed with status: ${currentBuild.result}.",
-                    to: "ajayofficial1998@example.com",
+                    to: "ajayofficial1998@gmail.com",
                     attachLog: true
         }
     }
