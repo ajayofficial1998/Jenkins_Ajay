@@ -12,12 +12,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Build using the code from: $CODE_PATH"
+                echo 'mvn clean package'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo "Execute the unit tests"
-                echo "Execute of integration tests"
+                echo "Execute the unit tests..!"
+                echo "Unit test using Cucumber"
+                echo "Execute the integration tests"
+                echo "Integration test using Robot Framework"
             }
             post {
                 success {
@@ -36,12 +39,14 @@ pipeline {
         }
         stage('Code Analysis') {
             steps {
-                echo "Integrating the code analysis"
+                echo "Integrating the code analysis...!"
+                echo "Analyzing the code using SonarQube"
             }
         }
         stage('Security Scan') {
             steps {
-                echo "Security Scanning"
+                echo "Security Scanning...!"
+                echo "Security Scanning using SonarQube"
             }
             post {
                 success {
@@ -61,16 +66,19 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo "Deploying the application to the server $TESTING_DOMAIN environment"
+                echo "Deploying it to the staging server"
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run the integration test on staging server"
+                echo "Run the integration test on staging server...!"
+                echo "Staging of integration test using Postman"
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo "Application deployment to the $PRODUCTION_DOMAIN environment"
+                echo "Application Deployment using AWS EC2 instance"
             }
         }
     }
