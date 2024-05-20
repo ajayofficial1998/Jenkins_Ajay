@@ -4,7 +4,7 @@ pipeline {
     environment {
         CODE_PATH = "/path/to/code"
         TESTING_ENVIRONMENT = "testing"
-        PROD_ENVIRONMENT = "yourname_production"
+        PROD_ENVIRONMENT = "your_name"
         EMAIL_NOTIFICATION = "ajayofficial1998@gmail.com"
     }
 
@@ -12,7 +12,6 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Build using the code from: $CODE_PATH"
-                echo "Code running"
                
             }
         }
@@ -94,8 +93,6 @@ pipeline {
                     </body>
                     </html>''',
                 to: 'ajayofficial1998@gmail.com',
-                from: 'jenkins@example.com',
-                replyTo: 'jenkins@example.com',
                 mimeType: 'text/html'
             )
         }
