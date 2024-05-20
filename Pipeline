@@ -99,6 +99,7 @@ pipeline {
                 from: 'jenkinsgithub@example.com',
                 replyTo: 'jenkinsgithub@example.com',
                 mimeType: 'text/html'
+                attachLog: true
             )
         }
     }
