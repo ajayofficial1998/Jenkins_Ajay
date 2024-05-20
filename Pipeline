@@ -4,7 +4,7 @@ pipeline {
     environment {
         CODE_DIRECTORY = "/path/to/code"
         TESTING_ENVIRONMENT = "testing"
-        PROD_ENVVIRONMENT = "yourname_production"
+        PROD_ENVIRONMENT = "yourname_production"
         EMAIL_NOTIFICATION = "ajayofficial1998@gmail.com"
     }
 
@@ -13,7 +13,6 @@ pipeline {
             steps {
                 echo 'Build the code by Maven...!'
                 echo 'mvn clean package' 
-                
             }
         }
         stage('Unit and Integration Tests') {
@@ -22,11 +21,11 @@ pipeline {
                 echo 'Unit test using Cucumber'
 
                 echo 'Execute the Integration Test...!'
-                echo 'Intergration test using Robot Framework'
+                echo 'Integration test using Robot Framework'
             }
             post {
                 success {
-                    mail to: '${env.EMAIL_NOTIFICATION}',
+                    mail to: "${env.EMAIL_NOTIFICATION}",
                          subject: 'Unit and Integration Tests SUCCESSFUL',
                          body: 'The Testing executed successfully...!. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                          mimeType: 'text/html'
@@ -49,18 +48,17 @@ pipeline {
             steps {
                 echo 'Perform Security Scan...!'  
                 echo 'Security Scanning using SonarQube'
-
             }
             post {
                 success {
                     mail to: "${env.EMAIL_NOTIFICATION}",
-                         subject: 'Security scan was SUCCESSFUL,
-                         body:'The security scan executed successfully...!. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
+                         subject: 'Security scan was SUCCESSFUL',
+                         body: 'The security scan executed successfully...!. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                          mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.EMAIL_NOTIFICATION}",
-                         subject: 'Security scan FAILD',
+                         subject: 'Security scan FAILED',
                          body: 'The Security scan execution was failed...!. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console',
                          mimeType: 'text/html'
                 }
@@ -80,9 +78,8 @@ pipeline {
         }
         stage('Deploy to Production') {
             steps {
-                 echo 'Application deployment to the Production...!$PROD_ENVVIRONMENT environment'
+                 echo 'Application deployment to the Production...! ${PROD_ENVIRONMENT} environment'
                  echo 'Application Deployment using AWS EC2 instance'
-
             }
         }
     }
@@ -90,7 +87,7 @@ pipeline {
     post {
         always {
             emailext (
-                subject: 'Pipeline Successful': ${currentBuild.result}',
+                subject: 'Pipeline Successful',
                 body: '''<html>
                     <body>
                     <p>Build Condition: ${currentBuild.result}</p>
