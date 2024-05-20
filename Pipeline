@@ -25,14 +25,14 @@ pipeline {
             post {
                 success {
                     mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests zre SUCCESSFUL",
+                         subject: "Unit and Integration Tests are SUCCESSFUL",
                          body: "Testing executed successfully. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
                 failure {
                     mail to: "${env.NOTIFICATION_EMAIL}",
                          subject: "Tests Failed",
-                         body: Test execution failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         body: "Test execution failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
                          mimeType: 'text/html'
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo "Run the integration test on stagimg server"
+                echo "Run the integration test on staging server"
 
             }
         }
@@ -86,7 +86,7 @@ pipeline {
     post {
         always {
             emailext (
-                subject: "Pipeline Successfull: ${currentBuild.result}",
+                subject: "Pipeline Successful: ${currentBuild.result}",
                 body: '''<html>
                     <body>
                     <p>Build Log: ${currentBuild.result}</p>
