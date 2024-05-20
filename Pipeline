@@ -1,104 +1,77 @@
 pipeline {
     agent any
 
-    environment {
-        CODE_DIRECTORY = "/path/to/code"
-        TEST_ENV = "testing"
-        PROD_ENV = "yourname_production"
-        NOTIFICATION_EMAIL = "ajayofficial1998@gmail.com"
+    triggers {
+        githubPush()
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                echo "Checkout the code from the GitHub repository"
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/veena223070113/Jenkins_6.2C.git']]])
+            }
+        }
+
         stage('Build') {
             steps {
-                echo "Fetching the source code from: $CODE_DIRECTORY"
-                echo "Compiling the code and generating artifacts"
-                // Add actual build steps here
+                echo "Build the code using Maven"
+                echo 'mvn clean package'
             }
         }
+
         stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests"
-                echo "Running integration tests"
-                // Add actual test steps here
-            }
-            post {
-                success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Passed",
-                         body: "Unit and Integration Tests have passed successfully. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
-                }
-                failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Unit and Integration Tests Failed",
-                         body: "Unit and Integration Tests have failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
-                }
+                echo "Run unit tests"
+                echo 'mvn test'
+
+                echo "Run integration tests"
+                echo "Integration test using Postman"
             }
         }
+
         stage('Code Analysis') {
             steps {
-                echo 'Checking the quality of the code'
-                // Add actual code quality check steps here
+                echo "Integrate SonarQube"
+                echo "Code Analysis using SonarQube analysis command"
             }
         }
+
         stage('Security Scan') {
             steps {
-                echo 'Performing security scan'
-                // Add actual security scan steps here
-            }
-            post {
-                success {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Passed",
-                         body: "Security scan completed without any issues. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
-                }
-                failure {
-                    mail to: "${env.NOTIFICATION_EMAIL}",
-                         subject: "Security Scan Failed",
-                         body: "Security scan has some issues. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
-                         mimeType: 'text/html'
-                }
+                echo "Run security scan using OWASP ZAP"
+                echo "Security scan using OWASP ZAP"
             }
         }
+
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying the application to the $TEST_ENV environment"
-                // Add actual staging deployment steps here
+                echo "Deploy to a staging environment AWS EC2"
             }
         }
+
         stage('Integration Tests on Staging') {
             steps {
-                echo "Running integration tests on staging environment"
-                // Add actual integration tests on staging steps here
+                echo "Run integration tests on the staging environment"
+                echo "Using Selenium for UI tests and JMeter for performance tests"
             }
         }
+
         stage('Deploy to Production') {
             steps {
-                echo "Deploying the code to the $PROD_ENV environment"
-                // Add actual production deployment steps here
+                echo "Deploy to a production environment AWS EC2 using appropriate tools"
+                echo "Deploy to a production environment AWS EC2"
             }
         }
     }
 
     post {
         always {
-            emailext (
-                subject: "Pipeline Status: ${currentBuild.result}",
-                body: '''<html>
-                    <body>
-                    <p>Build Status: ${currentBuild.result}</p>
-                    <p>Build Number: ${currentBuild.number}</p>
-                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
-                    </body>
-                    </html>''',
-                to: 'ajayofficial1998@gmail.com',
-                from: 'jenkins@example.com',
-                replyTo: 'jenkins@example.com',
-                mimeType: 'text/html'
-            )
+            echo "Sending a notification email"
+            emailext subject: "Pipeline ${currentBuild.result}",
+                    body: "The pipeline has completed with status: ${currentBuild.result}.",
+                    to: "specified-email@example.com",
+                    attachLog: true
         }
     }
 }
