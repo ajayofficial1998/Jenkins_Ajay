@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    domain {
+    environment {
         CODE_PATH = "/path/to/code"
         TESTING_DOMAIN = "testing"
         PRODUCTION_DOMAIN = "your_name"
@@ -12,26 +12,24 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Build using the code from: $CODE_PATH"
-               
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo "Execute the unit tests"
                 echo "Execute of integration tests"
-              
             }
             post {
                 success {
-                    mail to: "${env.EMAIL_NOTIFICATION}",
+                    mail to: "${EMAIL_NOTIFICATION}",
                          subject: "Unit and Integration Tests are SUCCESSFUL",
-                         body: "Testing executed successfully. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         body: "Testing executed successfully. See attached logs for details.<br>Console Output: ${BUILD_URL}console",
                          mimeType: 'text/html'
                 }
                 failure {
-                    mail to: "${env.EMAIL_NOTIFICATION}",
+                    mail to: "${EMAIL_NOTIFICATION}",
                          subject: "Tests Failed",
-                         body: "Test execution failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         body: "Test execution failed. See attached logs for details.<br>Console Output: ${BUILD_URL}console",
                          mimeType: 'text/html'
                 }
             }
@@ -39,25 +37,23 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo "Integrating the code analysis"
-               
             }
         }
         stage('Security Scan') {
             steps {
                 echo "Security Scanning"
-              
             }
             post {
                 success {
-                    mail to: "${env.EMAIL_NOTIFICATION}",
+                    mail to: "${EMAIL_NOTIFICATION}",
                          subject: "Security Scan SUCCESSFUL",
-                         body: "Security scan executed successfully. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         body: "Security scan executed successfully. See attached logs for details.<br>Console Output: ${BUILD_URL}console",
                          mimeType: 'text/html'
                 }
                 failure {
-                    mail to: "${env.EMAIL_NOTIFICATION}",
+                    mail to: "${EMAIL_NOTIFICATION}",
                          subject: "Security Scan Failed",
-                         body: "Security scan execution failed. See attached logs for details.<br>Console Output: ${env.BUILD_URL}console",
+                         body: "Security scan execution failed. See attached logs for details.<br>Console Output: ${BUILD_URL}console",
                          mimeType: 'text/html'
                 }
             }
@@ -65,19 +61,16 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo "Deploying the application to the server $TESTING_DOMAIN environment"
-                
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo "Run the integration test on staging server"
-
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo "Application deployment to the $PRODUCTION_DOMAIN environment"
-               
             }
         }
     }
@@ -89,7 +82,7 @@ pipeline {
                 body: '''<html>
                     <body>
                     <p>Build Log: ${currentBuild.result}</p>
-                    <p>Console Output: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>
+                    <p>Console Output: <a href="${BUILD_URL}console">${BUILD_URL}console</a></p>
                     </body>
                     </html>''',
                 to: 'ajayofficial1998@gmail.com',
